@@ -4,6 +4,8 @@
 
 2004-11-29  Mattias Amnefelt  <mattiasa@stacken.kth.se>
 
+	* Release 1.1
+	
 	* README: new url
 	* create_base.sql: updated for grappy
 	* grappy.py: rename to grappy and added more lock
