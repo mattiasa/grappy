@@ -70,13 +70,13 @@ import thread
 
 
 # If you want to use the mysql interface, uncomment the following line
-# import MySQLdb as gdpdb
+# import MySQLdb as grappydb
 
 # If you want to use the postgresql interface, uncomment the following line
-import pgdb as gdpdb
+import pgdb as grappydb
 postgresql=True;
 
-progname="gdp"
+progname="grappy"
 
 def daemonize (pidfilename,stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
     '''This forks the current process into a daemon.
@@ -204,9 +204,9 @@ class SQLHandler:
     def new_connection(self):
         printdebug('Allocating new connection')
         if postgresql:
-            conn = gdpdb.connect(user=DBUSER,host=DBHOST,database=DATABASE,password=DBPASS)
+            conn = grappy.connect(user=DBUSER,host=DBHOST,database=DATABASE,password=DBPASS)
         else:
-            conn = gdpdb.connect(user=DBUSER,host=DBHOST,db=DATABASE,passwd=DBPASS)
+            conn = grappy.connect(user=DBUSER,host=DBHOST,db=DATABASE,passwd=DBPASS)
         return conn
 
     def escape(self,k):
@@ -258,6 +258,7 @@ class GreylistRequestHandler (SocketServer.StreamRequestHandler):
                 self.info.cleanup()
 
 class policy_info:
+    lock = thread.allocate_lock()
 
     def __init__(self):
         self.words = {}
@@ -343,11 +344,27 @@ class policy_info:
         self.sql.execute(k)
 
     def create_entry(self):
-        ip,sender,recipient = self.triplet()
-        k = "insert into greylist (ip,sender,recipient,first,last,n) \
-             values('%s','%s','%s',%i,%i,%i)" % (ip,sender,recipient,
-                    time.time(), time.time(),1)
-        self.sql.execute(k)
+        self.lock.acquire()
+        try:
+            ip,sender,recipient = self.triplet()
+
+            k = "select first from greylist where ip='%s' \
+                and sender='%s' and recipient='%s'" % (ip,sender,recipient)
+            t = self.sql.select(k)
+            if t:
+                self.lock.release()
+                return
+            
+            k = "insert into greylist (ip,sender,recipient,first,last,n) \
+                values('%s','%s','%s',%i,%i,%i)" % (ip,sender,recipient,
+                time.time(), time.time(),1)
+            self.sql.execute(k)
+        except:
+            self.lock.release()
+            raise
+            
+        self.lock.release()
+                
 
     def get_policy(self):
         ip,sender,recipient = self.triplet()
