@@ -293,7 +293,7 @@ class policy_info:
         """returns if the entry is whitelisted"""
         ip,sender,recipient = self.triplet()
 
-        lightip = self.lightaddress(ip)
+        lightip = re.sub("\.[^.]*$", '', ip)
         senderdomain = re.sub("^.*@", '@', sender)
         recipientdomain = re.sub("^.*@", '@', recipient)
 
