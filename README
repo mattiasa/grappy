@@ -1,0 +1,38 @@
+This package is a postfix policy daemon which implements grey listing
+functionality. This is just one of many implementations.
+
+Features of this implementation are:
+
+1) Written in python, which makes the code short and readable.
+2) Uses a mysql database back end, which makes it suitable for cluster
+   mail server environments
+3) Written for high performance environments. It uses threads and a
+   database connection pool for high throughput
+
+There are a number of configuration options which are listed in the
+script.
+
+The table structure is listed in create_base.sql. Two tables are
+required. One for the greylist which contains all triplets, and one
+for the whitelist which contains one column each for ip, sender
+address and recipient address.
+
+Whitelist:
+
+The script will consult the whitelist before greylisting an entry.
+
+The whitelist contains one column each for sending ip, sending email
+address and recipient email address.
+
+The ip column can either contain the exact ip address, or the first
+three octets representing the class C network you wish to whitelist.
+
+The sender and recipient columns can either contain an exact email
+address or the domain part (including the @).
+
+Bugs:
+
+Please report any bugs you find to Mattias Amnefelt <mattiasa@stacken.kth.se>
+
+This software is based on greylist-python which has been placed in the
+public domain by it's author Vsevolod Sipakov <versus@megalink.ru>
