@@ -242,7 +242,7 @@ class GreylistRequestHandler (SocketServer.StreamRequestHandler):
                         action = self.info.get_policy()
 
                 except:
-                    printlog("MySQL database error")
+                    printlog("Database error")
                     if not action:
                         if PASS_ON_ERROR:
                             syslog_traceback()
