@@ -218,11 +218,11 @@ class GreylistRequestHandler (SocketServer.StreamRequestHandler):
                 self.info.add_pair(l)
             else:
                 # empty input line - we have to make a decision
-                ip,sender,recepient = self.info.triplet()
+                ip,sender,recipient = self.info.triplet()
                 action = ""
                 try:
                     if self.info.check_whitelist():
-                        printlog("whitelisted: sender=%s recepient=%s ip=%s" % (sender,recepient,ip))
+                        printlog("whitelisted: sender=%s recipient=%s ip=%s" % (sender,recipient,ip))
                         action = "dunno"
                     else:
                         action = self.info.get_policy()
@@ -334,7 +334,7 @@ class policy_info:
         self.sql.execute(k)
 
     def get_policy(self):
-        ip,sender,recepient = self.triplet()
+        ip,sender,recipient = self.triplet()
         firsttime = self.search_entry()
         if not firsttime:
             self.create_entry()
@@ -342,7 +342,7 @@ class policy_info:
             self.update_entry()
             return "dunno"
         else:
-            printlog("greylisted: sender=%s recepient=%s ip=%s" % (sender,recepient,ip))
+            printlog("greylisted: sender=%s recipient=%s ip=%s" % (sender,recipient,ip))
             return "defer_if_permit %s" % (GREYLIST_MESSAGE)
 
 # Dummy subclass of ThreadingTCPServer just to set allow_reuse_address
