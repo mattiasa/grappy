@@ -1,6 +1,6 @@
 This package is a postfix policy daemon which implements grey listing
 functionality. This is just one of many implementations. More
-information on the greylisting techique is available at
+information on the greylisting technique is available at
 http://projects.puremagic.com/greylisting/index.html
 
 This script can be found at
