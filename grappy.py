@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2004 Mattias Amnefelt
+# Copyright (c) 2004 Mattias Amnefelt <mattiasa@stacken.kth.se>
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -69,7 +69,7 @@ import MySQLdb
 import re
 import thread
 
-progname="smtpd-policy-daemon"
+progname="gdp"
 
 def daemonize (pidfilename,stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
     '''This forks the current process into a daemon.
