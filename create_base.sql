@@ -4,7 +4,7 @@
 
 use greylist;
 
--- drop table triplets;
+drop table greylist;
 
 create table greylist (
                 ip varchar(40) not null, 
@@ -12,9 +12,11 @@ create table greylist (
                 recipient varchar(100) not null, 
                 first integer not null, 
                 last integer not null,
-                primary key (ip,sender,recipient),
-                index last_index(last)
+		n integer not null,
+                primary key (ip,sender,recipient)
                 );
+
+drop table whitelist;
 
 create table whitelist (
 		ip varchar(40),
@@ -22,3 +24,6 @@ create table whitelist (
                 recipient varchar(100),
 		comment varchar(200)
 		);
+
+grant all on greylist to greylist;
+grant all on whitelist to greylist;
