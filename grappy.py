@@ -34,6 +34,10 @@
 # This software is based on greylist-python which has been placed in the
 # public domain by it's author Vsevolod Sipakov <versus@megalink.ru>
 
+#
+# $Id$
+#
+
 # Configuration variables
 
 # The amount of time from the first time a triplet is seen until it is
@@ -270,13 +274,13 @@ class policy_info:
     def lightaddress(self, address):
         return re.sub("\.[^.]*$", '.0', address)
 
-    def triplet(self):
+    def triplet(self,lightp=LIGHTGREY):
         address = ""
         sender = ""
         recipient = ""
         try:
             address = self.words['client_address']
-            if LIGHTGREY:
+            if lightp:
                 address = self.lightaddress(address)
 
         except KeyError:
@@ -308,7 +312,7 @@ class policy_info:
 
     def check_whitelist(self):
         """returns if the entry is whitelisted"""
-        ip,sender,recipient = self.triplet()
+        ip,sender,recipient = self.triplet(lightp=False)
 
         lightip = re.sub("\.[^.]*$", '', ip)
         senderdomain = re.sub("^.*@", '@', sender)
