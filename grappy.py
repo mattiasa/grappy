@@ -65,9 +65,16 @@ import sys, time, os
 import syslog, traceback
 import SocketServer
 import socket
-import MySQLdb
 import re
 import thread
+
+
+# If you want to use the mysql interface, uncomment the following line
+# import MySQLdb as gdpdb
+
+# If you want to use the postgresql interface, uncomment the following line
+import pgdb as gdpdb
+postgresql=True;
 
 progname="gdp"
 
@@ -196,7 +203,10 @@ class SQLHandler:
 
     def new_connection(self):
         printdebug('Allocating new connection')
-        conn = MySQLdb.connect(user=DBUSER,host=DBHOST,db=DATABASE,passwd=DBPASS)
+        if postgresql:
+            conn = gdpdb.connect(user=DBUSER,host=DBHOST,database=DATABASE,password=DBPASS)
+        else:
+            conn = gdpdb.connect(user=DBUSER,host=DBHOST,db=DATABASE,passwd=DBPASS)
         return conn
 
     def escape(self,k):
@@ -273,11 +283,17 @@ class policy_info:
         try:
             sender = self.words['sender']
         except KeyError:
+            sender = 'void@void'
             pass
         try:
             recipient = self.words['recipient']
         except KeyError:
             pass
+
+        if sender == '':
+            sender = 'void@void'
+
+                        
         return address,sender,recipient
 
     def add_pair(self,k):
@@ -358,7 +374,9 @@ def main():
 
 try:
     syslog.openlog(progname+'['+str(os.getpid())+']',0,syslog.LOG_MAIL)
-    daemonize('/var/run/greylist.pid')
+
+    if not debug: 
+        daemonize('/var/run/greylist.pid')
     main()
 
 except SystemExit:
