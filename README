@@ -1,6 +1,9 @@
 This package is a postfix policy daemon which implements grey listing
 functionality. This is just one of many implementations.
 
+This script can be found at
+http://www.stacken.kth.se/~mattiasa/projects/greylist-daemon-python/
+
 Features of this implementation are:
 
 1) Written in python, which makes the code short and readable.
@@ -20,13 +23,11 @@ address and recipient address.
 Whitelist:
 
 The script will consult the whitelist before greylisting an entry.
-
 The whitelist contains one column each for sending ip, sending email
 address and recipient email address.
 
 The ip column can either contain the exact ip address, or the first
 three octets representing the class C network you wish to whitelist.
-
 The sender and recipient columns can either contain an exact email
 address or the domain part (including the @).
 
