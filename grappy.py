@@ -204,9 +204,9 @@ class SQLHandler:
     def new_connection(self):
         printdebug('Allocating new connection')
         if postgresql:
-            conn = grappy.connect(user=DBUSER,host=DBHOST,database=DATABASE,password=DBPASS)
+            conn = grappydb.connect(user=DBUSER,host=DBHOST,database=DATABASE,password=DBPASS)
         else:
-            conn = grappy.connect(user=DBUSER,host=DBHOST,db=DATABASE,passwd=DBPASS)
+            conn = grappydb.connect(user=DBUSER,host=DBHOST,db=DATABASE,passwd=DBPASS)
         return conn
 
     def escape(self,k):
@@ -393,7 +393,7 @@ try:
     syslog.openlog(progname+'['+str(os.getpid())+']',0,syslog.LOG_MAIL)
 
     if not debug: 
-        daemonize('/var/run/greylist.pid')
+        daemonize("/var/run/" + progname + ".pid")
     main()
 
 except SystemExit:
