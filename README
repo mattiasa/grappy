@@ -26,7 +26,9 @@ Whitelist:
 
 The script will consult the whitelist before greylisting an entry.
 The whitelist contains one column each for sending ip, sending email
-address and recipient email address.
+address and recipient email address. Lookup in the table is done using
+a logical or between the columns, so it is only neccesary to match one
+column for the whitelist lookup to be true.
 
 The ip column can either contain the exact ip address, or the first
 three octets representing the class C network you wish to whitelist.
