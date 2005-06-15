@@ -99,9 +99,6 @@ def daemonize (pidfilename,stdin='/dev/null', stdout='/dev/null', stderr='/dev/n
     Advanced Programming in the Unix Environment
     W. Richard Stevens, 1992, Addison-Wesley, ISBN 0-201-56317-7.
     
-    History:
-      2001/07/10 by Jürgen Hermann
-      2002/08/28 by Noah Spurrier
     '''
     # Do first fork.
     try: 
@@ -177,8 +174,12 @@ class SQLHandler:
         try:
             ret = self.queue.pop(0)
         except IndexError:
-            ret = self.new_connection()
-            
+            try:
+                ret = self.new_connection()
+            except:
+                self.lock.release()
+                raise
+
         self.lock.release()
         return ret
 
